@@ -8,10 +8,9 @@ import NaiveBayes
 import Data.HashMap.Strict (HashMap, toList)
 import Test.QuickCheck
 
-testNaiveBayes = (do
+testNaiveBayes = do
   quickCheckResult prop_partitionData
   quickCheckResult prop_getMeanAndVariance
-  )
 
 -- test partitionData
 newtype InputData = InputData { unInputData :: [[Double]] } deriving (Show, Eq)

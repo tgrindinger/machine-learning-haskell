@@ -19,7 +19,7 @@ partitionData newData = fromList $ zip newClasses newTails
         newTails   = members <$> newClasses
 
 nonMissing :: [Text] -> [Text]
-nonMissing fieldValues = filter notMissing fieldValues
+nonMissing = filter notMissing
   where notMissing fieldValue = unpack fieldValue /= "?"
 
 findMode :: [Text] -> Text

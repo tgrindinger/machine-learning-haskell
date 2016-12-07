@@ -9,10 +9,9 @@ import qualified CatFieldProcessor as CatP
 import qualified ClassFieldProcessor as ClassP
 import qualified DistFieldProcessor as DistP
 
-testInputProcessor = (do
+testInputProcessor = do
   result <- runTestTT inputProcessorTests
   return ()
-  )
 
 -- TODO:
 -- construct :: [[Text]] -> Maybe Int -> InputProcessor
@@ -38,11 +37,14 @@ testAdjustTypes = TestCase (do
 -- TODO:
 -- processData :: InputProcessor -> [[Text]] -> [[Double]]
 
+defaultRecordData = (classMap, catMap, distMean)
+  where classMap = fromList [(pack "a", 0), (pack "b", 1), (pack "?", 1)]
+        catMap   = fromList [(pack "c", 0), (pack "d", 1), (pack "?", 0)]
+        distMean = 2
+
 makeFullRecord = (resultFull, procFull, recordFull)
   where recordFull        = pack <$> ["a", "1", "c", "2"]
-        classMap          = fromList [(pack "a", 0), (pack "b", 1), (pack "?", 1)]
-        catMap            = fromList [(pack "c", 0), (pack "d", 1), (pack "?", 0)]
-        distMean          = 2
+        (classMap, catMap, distMean) = defaultRecordData
         fieldProcsFull    = [ClassInstance $ ClassP.ClassFieldProcessor classMap,
                              DistInstance  $ DistP.DistFieldProcessor distMean,
                              CatInstance   $ CatP.CatFieldProcessor catMap,
@@ -53,9 +55,7 @@ makeFullRecord = (resultFull, procFull, recordFull)
 
 makeMissingRecord = (resultMissing, procMissing, recordMissing)
   where recordMissing     = pack <$> ["d", "?", "?", "?"]
-        classMap          = fromList [(pack "a", 0), (pack "b", 1), (pack "?", 1)]
-        catMap            = fromList [(pack "c", 0), (pack "d", 1), (pack "?", 0)]
-        distMean          = 2
+        (classMap, catMap, distMean) = defaultRecordData
         fieldProcsMissing = [CatInstance   $ CatP.CatFieldProcessor catMap,
                              DistInstance  $ DistP.DistFieldProcessor distMean,
                              ClassInstance $ ClassP.ClassFieldProcessor classMap,

@@ -19,7 +19,6 @@ main = do
   let newClassIndex   = if classIndex == "" then Nothing else Just $ read classIndex
       processor       = IP.construct newData newClassIndex
       processedData   = processData processor newData
-      processedSample = processSample processor personList
       classifier      = NB.construct processedData
       validation      = crossValidate numFolds processedData
       output          = ["",

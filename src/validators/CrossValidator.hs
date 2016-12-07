@@ -18,7 +18,7 @@ validateFold :: HashMap Double [[Double]] -> Int -> Int -> Double
 validateFold newData numFolds foldNum = numCorrect / fromIntegral (length actuals)
   where (testData, trainData) = splitData newData foldNum numFolds
         nb                    = construct trainData
-        predictions           = (flip classify) nb <$> tail <$> testData
+        predictions           = flip classify nb . tail <$> testData
         actuals               = head <$> testData
         numCorrect            = foldl' countAccurate 0 $ zip actuals predictions
         countAccurate s (actual, predicted) = s + if predicted == actual then 1 else 0 :: Double
