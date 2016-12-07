@@ -1,0 +1,4 @@
+#!/bin/bash
+
+runhaskell -i./src:./src/helpers:./src/classifiers:./src/processors:./src/validators src/Main.hs
+

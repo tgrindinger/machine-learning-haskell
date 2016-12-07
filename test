@@ -1,0 +1,4 @@
+#!/bin/bash
+
+runhaskell -i./src/helpers:./src/processors:./src/classifiers:./src/validators:./testsuite/helpers:./testsuite/processors:./testsuite/classifiers:./testsuite/validators testsuite/Test.hs
+
