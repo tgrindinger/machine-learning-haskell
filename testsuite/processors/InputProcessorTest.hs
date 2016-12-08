@@ -10,17 +10,17 @@ import qualified ClassFieldProcessor as ClassP
 import qualified DistFieldProcessor as DistP
 
 testInputProcessor = do
-  result <- runTestTT inputProcessorTests
-  return ()
+  putStrLn "Testing InputProcessor..."
+  runTestTT inputProcessorTests
 
 -- TODO:
 -- construct :: [[Text]] -> Maybe Int -> InputProcessor
 
-inputProcessorTests = TestList [TestLabel "test actualClass" testActualClass,
-                                TestLabel "test adjustTypes" testAdjustTypes,
-                                TestLabel "test numCapable" testNumCapable,
-                                TestLabel "test suggestType" testSuggestType,
-                                TestLabel "test attrRange" testAttrRange,
+inputProcessorTests = TestList [TestLabel "test actualClass"   testActualClass,
+                                TestLabel "test adjustTypes"   testAdjustTypes,
+                                TestLabel "test numCapable"    testNumCapable,
+                                TestLabel "test suggestType"   testSuggestType,
+                                TestLabel "test attrRange"     testAttrRange,
                                 TestLabel "test processRecord" testProcessRecord]
 
 testActualClass = TestCase (do
