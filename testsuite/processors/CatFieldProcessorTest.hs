@@ -21,9 +21,9 @@ testConstruct = TestCase (do
 
 testProcessData = TestCase (do
   let catProc = construct testList
-  assertEqual "processData" [1, 0, 0] . processData catProc $ pack "a"
-  assertEqual "processData" [0, 1, 0] . processData catProc $ pack "b"
-  assertEqual "processData" [0, 0, 1] . processData catProc $ pack "c"
-  assertEqual "processData" [0, 1, 0] . processData catProc $ pack "?"
+  assertEqual "processData" [2, 1, 1] . processData catProc $ pack "a"
+  assertEqual "processData" [1, 2, 1] . processData catProc $ pack "b"
+  assertEqual "processData" [1, 1, 2] . processData catProc $ pack "c"
+  assertEqual "processData" [1, 2, 1] . processData catProc $ pack "?"
   )
 

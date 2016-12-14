@@ -15,7 +15,7 @@ construct newData = CatFieldProcessor addMissing
 
 processData :: CatFieldProcessor -> Text -> [Double]
 processData processor newValue = newList
-  where list = replicate (length (keys $ catMap processor) - 1) 0 :: [Double]
+  where list = replicate (length (keys $ catMap processor) - 1) 1 :: [Double]
         index = catMap processor ! newValue
-        newList = take index list ++ [1] ++ drop (index + 1) list
+        newList = take index list ++ [2] ++ drop (index + 1) list
 

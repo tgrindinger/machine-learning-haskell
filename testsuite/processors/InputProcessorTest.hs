@@ -51,7 +51,7 @@ makeFullRecord = (resultFull, procFull, recordFull)
                              DistInstance  $ DistP.DistFieldProcessor distMean]
         classIndexFull    = 0
         procFull          = InputProcessor fieldProcsFull classIndexFull
-        resultFull        = [0, 1, 1, 0, 2]
+        resultFull        = [0, 1, 2, 1, 2]
 
 makeMissingRecord = (resultMissing, procMissing, recordMissing)
   where recordMissing     = pack <$> ["d", "?", "?", "?"]
@@ -62,7 +62,7 @@ makeMissingRecord = (resultMissing, procMissing, recordMissing)
                              CatInstance   $ CatP.CatFieldProcessor catMap]
         classIndexMissing = 2
         procMissing       = InputProcessor fieldProcsMissing classIndexMissing
-        resultMissing     = [1, 0, 1, 2, 1, 0]
+        resultMissing     = [1, 1, 2, 2, 2, 1]
 
 testProcessRecord = TestCase (do
   let (resultFull,    procFull,    recordFull)    = makeFullRecord
