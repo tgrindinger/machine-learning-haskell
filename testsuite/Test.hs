@@ -6,6 +6,7 @@ import CatFieldProcessorTest
 import ClassFieldProcessorTest
 import DistFieldProcessorTest
 import NaiveBayesTest
+import CrossValidatorTest
 
 main :: IO ()
 main = do
@@ -15,6 +16,7 @@ main = do
   testClassFieldProcessor
   testDistFieldProcessor
   -- testUtils
+  testCrossValidator
   testNaiveBayes
   return ()
 
