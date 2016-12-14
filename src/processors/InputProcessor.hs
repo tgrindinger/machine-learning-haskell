@@ -12,10 +12,10 @@ data InputProcessor = InputProcessor { fieldProcessors :: [FieldProcessor],
                                        classIndex      :: Int }
 
 construct :: [[Text]] -> Maybe Int -> InputProcessor
-construct newData newClassIndex = InputProcessor newFieldProcessors suggestedClass
-  where suggestedClass     = suggestClass newData
+construct newData newClassIndex = InputProcessor newFieldProcessors chosenClass
+  where chosenClass        = actualClass newClassIndex $ suggestClass newData
         suggestedTypes     = suggestTypes newData
-        adjustedTypes      = adjustTypes suggestedTypes $ actualClass newClassIndex suggestedClass
+        adjustedTypes      = adjustTypes suggestedTypes chosenClass
         newFieldProcessors = zipWith FP.construct adjustedTypes (transpose newData)
 
 actualClass :: Maybe Int -> Int -> Int
@@ -33,22 +33,15 @@ processData :: InputProcessor -> [[Text]] -> [[Double]]
 processData processor = fmap (processRecord processor)
 
 processRecord :: InputProcessor -> [Text] -> [Double]
-processRecord processor record = classedRecord
+processRecord processor record = classValue : processSample processor unclassedRecord
   where newClassIndex   = classIndex processor
-        procs           = fieldProcessors processor
-        classValue      = head . FP.processData (procs !! newClassIndex) $ record !! newClassIndex
-        splitRecord     = splitAt newClassIndex record
-        splitProcs      = splitAt newClassIndex procs
-        unclassedRecord = fst splitRecord ++ tail (snd splitRecord)
-        unclassedProcs  = fst splitProcs  ++ tail (snd splitProcs)
-        processedRecord = concatMap (uncurry FP.processData) $ zip unclassedProcs unclassedRecord
-        classedRecord   = classValue : processedRecord
+        classValue      = head . FP.processData (fieldProcessors processor !! newClassIndex) $ record !! newClassIndex
+        unclassedRecord = take newClassIndex record ++ drop (newClassIndex + 1) record
 
 processSample :: InputProcessor -> [Text] -> [Double]
-processSample processor sample = concatMap (uncurry FP.processData) $ zip procsNoClass sample
-  where classProc    = fieldProcessors processor !! classIndex processor
-        splitProcs   = splitAt (classIndex processor) (fieldProcessors processor)
-        procsNoClass = fst splitProcs ++ tail (snd splitProcs)
+processSample processor sample = concatMap (uncurry FP.processData) $ zip unclassedProcs sample
+  where splitProcs     = splitAt (classIndex processor) $ fieldProcessors processor
+        unclassedProcs = fst splitProcs ++ tail (snd splitProcs)
 
 evaluateData :: InputProcessor -> [[Text]] -> Text
 evaluateData processor newData = pack $ intercalate "\n" newLines
@@ -68,7 +61,6 @@ suggestTypes newData = suggestType <$> transpose newData
 
 suggestType :: [Text] -> Text
 suggestType attr
-  -- | not (numCapable attr) || manyRepeats = pack "Category"
   | not (numCapable attr) = pack "Category"
   | otherwise                            = pack "Distribution"
   where manyRepeats = length (nub attr) <= quot (length attr) 2
