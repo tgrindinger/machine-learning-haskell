@@ -32,7 +32,7 @@ zeroVarFields newVars = S.fromList . concatMap zeroVarFields' $ HM.elems newVars
 zeroVarFields' :: [Double] -> [Int]
 zeroVarFields' list = zeroIndices
   where varStatus = (< 0.1) <$> list
-        zeroIndices = fst <$> (filter snd $ zip [0..] varStatus)
+        zeroIndices = fst <$> filter snd (zip [0..] varStatus)
 
 classify :: [Double] -> NaiveBayes -> Double
 classify sample naiveBayes = fst . last $ sortOn snd predictions
@@ -43,7 +43,7 @@ classify' :: [Double] -> NaiveBayes -> Double -> Double
 classify' sample naiveBayes classId = classProb * attrProb
   where classData f = f naiveBayes ! classId
         classProb   = fromIntegral (classData classSizes) / fromIntegral (popSize naiveBayes)
-        nonZeroVar list = snd <$> (filter (flip notMember (zeroVar naiveBayes) . fst) $ zip [0..] list)
+        nonZeroVar list = snd <$> filter (flip notMember (zeroVar naiveBayes) . fst) (zip [0..] list)
         newMeans    = nonZeroVar (classData means)
         newVars     = nonZeroVar (classData variances)
         newSample   = nonZeroVar sample
